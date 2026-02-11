@@ -7,9 +7,15 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "seed:topics": "ts-node src/scripts/seedTopics.ts"
   },
-  "keywords": ["placement", "prep", "mern", "typescript"],
+  "keywords": [
+    "placement",
+    "prep",
+    "mern",
+    "typescript"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

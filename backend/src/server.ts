@@ -25,6 +25,8 @@ import cors from 'cors';
 import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import topicRoutes from './routes/topic.routes';
+import practiceRoutes from './routes/practice.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 // Load environment variables from .env file
@@ -62,6 +64,8 @@ app.use(express.urlencoded({ extended: true }));
  * All routes are prefixed with /api
  * - /api/auth/* - Authentication endpoints
  * - /api/users/* - User profile endpoints
+ * - /api/topics/* - Topic browsing (public)
+ * - /api/practice/* - Practice tracking (protected)
  */
 
 // Health check endpoint (useful for monitoring)
@@ -76,6 +80,8 @@ app.get('/health', (req, res) => {
 // Register route modules
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/topics', topicRoutes);
+app.use('/api/practice', practiceRoutes);
 
 /**
  * Error Handlers
@@ -111,12 +117,22 @@ const startServer = async (): Promise<void> => {
             console.log(`📚 API base URL: http://localhost:${PORT}/api`);
             console.log('');
             console.log('Available endpoints:');
-            console.log('  POST   /api/auth/register');
-            console.log('  POST   /api/auth/login');
-            console.log('  POST   /api/auth/refresh');
-            console.log('  POST   /api/auth/logout');
-            console.log('  GET    /api/users/me (protected)');
-            console.log('  PUT    /api/users/me (protected)');
+            console.log('  Authentication:');
+            console.log('    POST   /api/auth/register');
+            console.log('    POST   /api/auth/login');
+            console.log('    POST   /api/auth/refresh');
+            console.log('    POST   /api/auth/logout');
+            console.log('  User Profile:');
+            console.log('    GET    /api/users/me (protected)');
+            console.log('    PUT    /api/users/me (protected)');
+            console.log('  Topics:');
+            console.log('    GET    /api/topics');
+            console.log('    GET    /api/topics/:id');
+            console.log('  Practice:');
+            console.log('    POST   /api/practice (protected)');
+            console.log('    GET    /api/practice/history (protected)');
+            console.log('    GET    /api/practice/stats (protected)');
+            console.log('    GET    /api/practice/stats/:topicId (protected)');
             console.log('');
         });
     } catch (error) {
