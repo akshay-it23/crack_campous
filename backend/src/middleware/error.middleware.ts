@@ -123,10 +123,10 @@ export const errorHandler = (
         return;
     }
 
-    // Generic error (fallback)
+    // Generic fallback for unknown errors
     res.status(500).json({
         error: 'Internal Server Error',
-        message: 'Something went wrong',
+        message: err?.message || 'Something went wrong. Please try again later.',
     });
 };
 
