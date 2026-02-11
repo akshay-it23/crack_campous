@@ -104,9 +104,11 @@ export const verifyPassword = async (
 export const generateAccessToken = (userId: string): string => {
     const payload: TokenPayload = { userId };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-        expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m',
-    });
+    const token = jwt.sign(
+        payload,
+        process.env.JWT_SECRET as string,
+        { expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m' }
+    );
 
     return token;
 };
@@ -134,9 +136,11 @@ export const generateAccessToken = (userId: string): string => {
 export const generateRefreshToken = (userId: string): string => {
     const payload: TokenPayload = { userId };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-        expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d',
-    });
+    const token = jwt.sign(
+        payload,
+        process.env.JWT_SECRET as string,
+        { expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d' }
+    );
 
     return token;
 };
@@ -168,7 +172,7 @@ export const generateRefreshToken = (userId: string): string => {
  */
 export const verifyToken = (token: string): TokenPayload => {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
         return decoded;
     } catch (error) {
         if (error instanceof jwt.TokenExpiredError) {

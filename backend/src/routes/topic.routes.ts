@@ -25,7 +25,7 @@ const router = Router();
  *   "Aptitude": [...]
  * }
  */
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const topics = await practiceService.getAllTopics();
         res.status(200).json(topics);

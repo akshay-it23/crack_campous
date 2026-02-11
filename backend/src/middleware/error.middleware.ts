@@ -32,12 +32,17 @@ import { Error as MongooseError } from 'mongoose';
  * - Unknown errors: Generic 500 Internal Server Error
  */
 export const errorHandler = (
-    err: Error,
+    err: any,
     req: Request,
     res: Response,
     next: NextFunction
 ): void => {
-    console.error('❌ Error:', err);
+    // Safely log error
+    console.error('❌ Error occurred:');
+    if (err) {
+        console.error('Message:', err.message || 'Unknown error');
+        console.error('Stack:', err.stack || 'No stack trace');
+    }
 
     // Zod validation errors
     if (err instanceof ZodError) {

@@ -11,7 +11,6 @@ import { Document } from 'mongoose';
  * Topic Document Interface
  */
 export interface ITopic extends Document {
-    _id: string;
     name: string;
     category: string;
     difficulty: string;
@@ -25,7 +24,6 @@ export interface ITopic extends Document {
  * PracticeLog Document Interface
  */
 export interface IPracticeLog extends Document {
-    _id: string;
     userId: string;
     topicId: string;
     questionTitle: string;

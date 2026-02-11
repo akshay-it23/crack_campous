@@ -27,6 +27,7 @@ import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import topicRoutes from './routes/topic.routes';
 import practiceRoutes from './routes/practice.routes';
+import progressRoutes from './routes/progress.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 // Load environment variables from .env file
@@ -82,6 +83,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/practice', practiceRoutes);
+app.use('/api/progress', progressRoutes);
 
 /**
  * Error Handlers
@@ -133,6 +135,11 @@ const startServer = async (): Promise<void> => {
             console.log('    GET    /api/practice/history (protected)');
             console.log('    GET    /api/practice/stats (protected)');
             console.log('    GET    /api/practice/stats/:topicId (protected)');
+            console.log('  Progress:');
+            console.log('    GET    /api/progress/overview (protected)');
+            console.log('    GET    /api/progress/topic/:topicId (protected)');
+            console.log('    GET    /api/progress/strengths-weaknesses (protected)');
+            console.log('    POST   /api/progress/recalculate (protected)');
             console.log('');
         });
     } catch (error) {
