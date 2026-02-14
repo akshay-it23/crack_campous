@@ -110,6 +110,40 @@ export const logPractice = async (
 
     await practiceLog.save();
 
+    // ===== GAMIFICATION INTEGRATION =====
+    // Import gamification services dynamically to avoid circular dependencies
+    const badgeService = await import('./badge.service');
+    const challengeService = await import('./challenge.service');
+    const { User } = await import('../models/User');
+
+    // 1. Update user streak
+    await updateUserStreak(userId);
+
+    // 2. Award points based on difficulty
+    const pointsMap = { Easy: 10, Medium: 20, Hard: 30 };
+    const points = data.solved ? pointsMap[data.difficulty] : 0;
+
+    if (points > 0) {
+        await User.findByIdAndUpdate(userId, {
+            $inc: { 'gamification.totalPoints': points },
+        });
+
+        // Recalculate level
+        const user = await User.findById(userId);
+        if (user) {
+            const newLevel = Math.floor((user.gamification?.totalPoints || 0) / 100) + 1;
+            await User.findByIdAndUpdate(userId, {
+                $set: { 'gamification.level': newLevel },
+            });
+        }
+    }
+
+    // 3. Check and award badges
+    await badgeService.checkAndAwardBadges(userId);
+
+    // 4. Update daily challenge progress
+    await challengeService.updateChallengeProgress(userId, data.topicId, data.difficulty, data.solved);
+
     return {
         _id: practiceLog._id.toString(),
         userId: practiceLog.userId,
@@ -124,6 +158,62 @@ export const logPractice = async (
         practicedAt: practiceLog.practicedAt,
         createdAt: practiceLog.createdAt,
     };
+};
+
+/**
+ * Update user's practice streak
+ */
+const updateUserStreak = async (userId: string): Promise<void> => {
+    const { User } = await import('../models/User');
+    const user = await User.findById(userId);
+    if (!user) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const lastPractice = user.gamification?.lastPracticeDate;
+
+    if (!lastPractice) {
+        // First practice ever
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                'gamification.currentStreak': 1,
+                'gamification.longestStreak': 1,
+                'gamification.lastPracticeDate': today,
+            },
+        });
+        return;
+    }
+
+    const lastPracticeDate = new Date(lastPractice);
+    lastPracticeDate.setHours(0, 0, 0, 0);
+
+    const daysDiff = Math.floor((today.getTime() - lastPracticeDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysDiff === 0) {
+        // Already practiced today, no change
+        return;
+    } else if (daysDiff === 1) {
+        // Consecutive day, increment streak
+        const newStreak = (user.gamification?.currentStreak || 0) + 1;
+        const longestStreak = Math.max(newStreak, user.gamification?.longestStreak || 0);
+
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                'gamification.currentStreak': newStreak,
+                'gamification.longestStreak': longestStreak,
+                'gamification.lastPracticeDate': today,
+            },
+        });
+    } else {
+        // Streak broken, reset to 1
+        await User.findByIdAndUpdate(userId, {
+            $set: {
+                'gamification.currentStreak': 1,
+                'gamification.lastPracticeDate': today,
+            },
+        });
+    }
 };
 
 /**

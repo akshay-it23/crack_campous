@@ -74,6 +74,36 @@ const UserSchema = new Schema<IUser>(
             type: [String],
             default: [],
         },
+        gamification: {
+            totalPoints: {
+                type: Number,
+                default: 0,
+                min: [0, 'Points cannot be negative'],
+            },
+            currentStreak: {
+                type: Number,
+                default: 0,
+                min: [0, 'Streak cannot be negative'],
+            },
+            longestStreak: {
+                type: Number,
+                default: 0,
+                min: [0, 'Longest streak cannot be negative'],
+            },
+            lastPracticeDate: {
+                type: Date,
+            },
+            level: {
+                type: Number,
+                default: 1,
+                min: [1, 'Level must be at least 1'],
+            },
+            badgesEarned: {
+                type: Number,
+                default: 0,
+                min: [0, 'Badges earned cannot be negative'],
+            },
+        },
     },
     {
         timestamps: true, // Automatically add createdAt and updatedAt

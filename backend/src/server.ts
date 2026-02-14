@@ -28,7 +28,12 @@ import userRoutes from './routes/user.routes';
 import topicRoutes from './routes/topic.routes';
 import practiceRoutes from './routes/practice.routes';
 import progressRoutes from './routes/progress.routes';
+import badgeRoutes from './routes/badge.routes';
+import leaderboardRoutes from './routes/leaderboard.routes';
+import challengeRoutes from './routes/challenge.routes';
+import sharingRoutes from './routes/sharing.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
+import { initializeCronJobs } from './scripts/cronJobs';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -84,6 +89,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/practice', practiceRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/badges', badgeRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/challenges', challengeRoutes);
+app.use('/api/share', sharingRoutes);
 
 /**
  * Error Handlers
@@ -140,7 +149,24 @@ const startServer = async (): Promise<void> => {
             console.log('    GET    /api/progress/topic/:topicId (protected)');
             console.log('    GET    /api/progress/strengths-weaknesses (protected)');
             console.log('    POST   /api/progress/recalculate (protected)');
+            console.log('  Badges:');
+            console.log('    GET    /api/badges');
+            console.log('    GET    /api/badges/my (protected)');
+            console.log('    GET    /api/badges/:badgeId/progress (protected)');
+            console.log('  Leaderboard:');
+            console.log('    GET    /api/leaderboard/global');
+            console.log('    GET    /api/leaderboard/topic/:topicId');
+            console.log('    GET    /api/leaderboard/my-rank (protected)');
+            console.log('  Challenges:');
+            console.log('    GET    /api/challenges/today (protected)');
+            console.log('    GET    /api/challenges/history (protected)');
+            console.log('  Sharing:');
+            console.log('    GET    /api/share/stats (protected)');
+            console.log('    GET    /api/share/card (protected)');
             console.log('');
+
+            // Initialize cron jobs
+            initializeCronJobs();
         });
     } catch (error) {
         console.error('❌ Failed to start server:', error);

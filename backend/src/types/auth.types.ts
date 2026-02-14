@@ -29,6 +29,14 @@ export interface IUser extends Document {
     college?: string;
     graduationYear?: number;
     targetCompanies?: string[];
+    gamification?: {
+        totalPoints: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastPracticeDate?: Date;
+        level: number;
+        badgesEarned: number;
+    };
     createdAt: Date;
     updatedAt: Date;
 }
@@ -126,6 +134,14 @@ export interface UserResponse {
     college?: string;
     graduationYear?: number;
     targetCompanies?: string[];
+    gamification?: {
+        totalPoints: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastPracticeDate?: Date;
+        level: number;
+        badgesEarned: number;
+    };
     createdAt: Date;
     updatedAt: Date;
 }
