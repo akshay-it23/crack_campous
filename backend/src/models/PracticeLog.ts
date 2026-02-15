@@ -18,7 +18,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPracticeLog extends Document {
     _id: string;
-    userId: string;oiq 4nq4
+    userId: string;
     topicId: string;
     questionTitle: string;
     questionUrl?: string;

@@ -32,6 +32,8 @@ import badgeRoutes from './routes/badge.routes';
 import leaderboardRoutes from './routes/leaderboard.routes';
 import challengeRoutes from './routes/challenge.routes';
 import sharingRoutes from './routes/sharing.routes';
+import adminRoutes from './routes/admin.routes';
+import analyticsRoutes from './routes/analytics.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 import { initializeCronJobs } from './scripts/cronJobs';
 
@@ -42,7 +44,7 @@ dotenv.config();
 const app: Application = express();
 
 // Server port (from .env or default 5000)
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 /**
  * Middleware Configuration
@@ -93,6 +95,8 @@ app.use('/api/badges', badgeRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/share', sharingRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/admin/analytics', analyticsRoutes);
 
 /**
  * Error Handlers
