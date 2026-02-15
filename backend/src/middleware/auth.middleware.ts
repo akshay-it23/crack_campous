@@ -106,3 +106,6 @@ export const authenticateToken = (
         });
     }
 };
+
+// Export alias for consistency
+export const authMiddleware = authenticateToken;

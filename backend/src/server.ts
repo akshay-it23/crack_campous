@@ -22,6 +22,8 @@
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
+import compression from 'compression';
+import { createServer } from 'http';
 import { connectDB } from './config/database';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
@@ -34,8 +36,12 @@ import challengeRoutes from './routes/challenge.routes';
 import sharingRoutes from './routes/sharing.routes';
 import adminRoutes from './routes/admin.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import recommendationRoutes from './routes/recommendation.routes';
+import studyRoomRoutes from './routes/studyRoom.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 import { initializeCronJobs } from './scripts/cronJobs';
+import { apiLimiter, authLimiter, practiceLimiter } from './middleware/rateLimiter.middleware';
+import { SocketService } from './services/socket.service';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -66,6 +72,12 @@ app.use(express.json());
 // 3. URL-encoded Parser - Parse form data
 app.use(express.urlencoded({ extended: true }));
 
+// 4. Compression - Compress response bodies
+app.use(compression());
+
+// 5. Rate Limiting - Apply to all routes
+app.use('/api/', apiLimiter);
+
 /**
  * Routes
  * 
@@ -86,10 +98,10 @@ app.get('/health', (req, res) => {
 });
 
 // Register route modules
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
-app.use('/api/practice', practiceRoutes);
+app.use('/api/practice', practiceLimiter, practiceRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
@@ -97,6 +109,8 @@ app.use('/api/challenges', challengeRoutes);
 app.use('/api/share', sharingRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/analytics', analyticsRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/study-rooms', studyRoomRoutes);
 
 /**
  * Error Handlers
@@ -123,8 +137,15 @@ const startServer = async (): Promise<void> => {
         // Connect to MongoDB
         await connectDB();
 
-        // Start Express server
-        app.listen(PORT, () => {
+        // Create HTTP server for Socket.IO
+        const httpServer = createServer(app);
+
+        // Initialize Socket.IO
+        const socketService = new SocketService(httpServer);
+        console.log('✅ Socket.IO initialized');
+
+        // Start HTTP server (with Socket.IO)
+        httpServer.listen(PORT, () => {
             console.log('');
             console.log('🚀 Server started successfully!');
             console.log(`📡 Server running on: http://localhost:${PORT}`);
