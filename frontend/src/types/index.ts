@@ -169,10 +169,80 @@ export interface DailyChallenge {
     isActive: boolean;
 }
 
-// API Response Types
-export interface ApiResponse<T = any> {
+// Generic API Response
+export interface ApiResponse<T> {
     success: boolean;
     data?: T;
     message?: string;
     error?: string;
+}
+
+// Study Room Types
+export interface StudyRoom {
+    _id: string;
+    roomId: string;
+    name: string;
+    topic: Topic;
+    topicName: string;
+    createdBy: User;
+    participants: RoomParticipant[];
+    maxParticipants: number;
+    startTime: string;
+    endTime?: string;
+    isActive: boolean;
+    isPublic: boolean;
+    password?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface RoomParticipant {
+    userId: User | string;
+    userName: string;
+    joinedAt: string;
+    isActive: boolean;
+    currentProgress: number;
+}
+
+export interface CreateRoomData {
+    name: string;
+    topicId: string;
+    maxParticipants?: number;
+    isPublic?: boolean;
+    password?: string;
+}
+
+// Socket Event Types
+export interface ChatMessage {
+    userId: string;
+    userName: string;
+    message: string;
+    timestamp: Date;
+}
+
+export interface RoomEvent {
+    type: 'join' | 'leave' | 'progress' | 'milestone';
+    userId: string;
+    userName: string;
+    data?: any;
+    timestamp: Date;
+}
+
+export interface UserJoinedEvent {
+    userId: string;
+    userName: string;
+    timestamp: Date;
+}
+
+export interface UserLeftEvent {
+    userId: string;
+    userName: string;
+    timestamp: Date;
+}
+
+export interface ProgressUpdatedEvent {
+    userId: string;
+    userName: string;
+    progress: number;
+    timestamp: Date;
 }
