@@ -7,15 +7,17 @@ import { ReactNode } from 'react';
 import { useAuthStore } from '@/store/authStore';
 
 // Pages
-import Landing from '@/pages/Landing';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import Dashboard from '@/pages/Dashboard';
-import Topics from '@/pages/Topics';
-import Practice from '@/pages/Practice';
-import Recommendations from '@/pages/Recommendations';
-import Leaderboard from '@/pages/Leaderboard';
-import Profile from '@/pages/Profile';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Topics from './pages/Topics';
+import Practice from './pages/Practice';
+import Recommendations from './pages/Recommendations';
+import Leaderboard from './pages/Leaderboard';
+import Profile from './pages/Profile';
+import StudyRooms from './pages/StudyRooms';
+import StudyRoomDetail from './pages/StudyRoomDetail';
 
 /**
  * Protected Route Wrapper
@@ -151,6 +153,22 @@ export const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <Profile />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/study-rooms',
+        element: (
+            <ProtectedRoute>
+                <StudyRooms />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/study-rooms/:roomId',
+        element: (
+            <ProtectedRoute>
+                <StudyRoomDetail />
             </ProtectedRoute>
         ),
     },
