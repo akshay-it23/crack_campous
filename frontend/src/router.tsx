@@ -18,6 +18,8 @@ import Leaderboard from './pages/Leaderboard';
 import Profile from './pages/Profile';
 import StudyRooms from './pages/StudyRooms';
 import StudyRoomDetail from './pages/StudyRoomDetail';
+import Analytics from './pages/Analytics';
+import DailyChallenges from './pages/DailyChallenges';
 
 /**
  * Protected Route Wrapper
@@ -169,6 +171,22 @@ export const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <StudyRoomDetail />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/analytics',
+        element: (
+            <ProtectedRoute>
+                <Analytics />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/challenges',
+        element: (
+            <ProtectedRoute>
+                <DailyChallenges />
             </ProtectedRoute>
         ),
     },
