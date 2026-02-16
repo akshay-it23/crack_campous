@@ -207,3 +207,5 @@ export const Register = () => {
         </div>
     );
 };
+
+export default Register;

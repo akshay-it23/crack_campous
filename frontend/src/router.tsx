@@ -11,6 +11,11 @@ import Landing from '@/pages/Landing';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Dashboard from '@/pages/Dashboard';
+import Topics from '@/pages/Topics';
+import Practice from '@/pages/Practice';
+import Recommendations from '@/pages/Recommendations';
+import Leaderboard from '@/pages/Leaderboard';
+import Profile from '@/pages/Profile';
 
 /**
  * Protected Route Wrapper
@@ -109,6 +114,46 @@ export const router = createBrowserRouter([
             </ProtectedRoute>
         ),
     },
+    {
+        path: '/topics',
+        element: (
+            <ProtectedRoute>
+                <Topics />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/practice/:topicId',
+        element: (
+            <ProtectedRoute>
+                <Practice />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/recommendations',
+        element: (
+            <ProtectedRoute>
+                <Recommendations />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/leaderboard',
+        element: (
+            <ProtectedRoute>
+                <Leaderboard />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/profile',
+        element: (
+            <ProtectedRoute>
+                <Profile />
+            </ProtectedRoute>
+        ),
+    },
 
     // Catch all - redirect to landing
     {
@@ -116,3 +161,4 @@ export const router = createBrowserRouter([
         element: <Navigate to="/" replace />,
     },
 ]);
+
